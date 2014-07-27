@@ -12,6 +12,7 @@
     "test": "cd tests && mocha"
   },
   "keywords": [
+    "broccoli-plugin",
     "broccoli",
     "polymer",
     "vulcanize",
