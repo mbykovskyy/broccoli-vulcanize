@@ -1,0 +1,8 @@
+# Ignore files
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Ignore directories
+node_modules/
+tmp/
