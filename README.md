@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-$ npm install --save-dev broccoli-vulcanize
+npm install --save-dev broccoli-vulcanize
 ```
 
 ## Usage
