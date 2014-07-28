@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mbykovskyy/broccoli-vulcanize.svg?branch=master)](https://travis-ci.org/mbykovskyy/broccoli-vulcanize)
 # broccoli-vulcanize
 
 [Broccoli][broccoli] plugin for [Polymer vulcanize][polymer-vulcanize] tool.
