@@ -4,6 +4,7 @@ var RSVP = require('rsvp');
 var vulcanize = require('vulcanize');
 var path = require('path');
 var mkdirp = require('mkdirp');
+var clone = require('clone');
 
 module.exports = Vulcanize;
 Vulcanize.prototype = Object.create(Writer.prototype);
@@ -14,23 +15,25 @@ function Vulcanize(inputTree, options) {
     return new Vulcanize(inputTree, options);
   }
 
-  this.options = options || {};
+  // We shouldn't change passed in options.
+  this.options = clone(options) || {};
   this.options.input = inputTree;
+  this.outputFilepath = this.options.output || path.basename(inputTree);
 }
 
 Vulcanize.prototype.write = function(readTree, destDir) {
-  var outputFilepath = this.options.output || path.basename(this.options.input);
-  this.options.output = path.join(destDir, outputFilepath);
-
-  var filter = this;
+  // We have to clone filter options as vulcanize changes the hash which causes
+  // the hash grow when called repeatedly.
+  var options = clone(this.options);
+  options.output = path.join(destDir, this.outputFilepath);
 
   return new RSVP.Promise(function(resolve, reject) {
-    vulcanize.setOptions(filter.options, function(error) {
+    vulcanize.setOptions(options, function(error) {
       if (error) {
         reject(error);
       }
 
-      mkdirp(path.dirname(filter.options.output), function(error) {
+      mkdirp(path.dirname(options.output), function(error) {
         if (error) {
           reject(error);
         }

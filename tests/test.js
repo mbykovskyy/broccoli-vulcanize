@@ -22,6 +22,16 @@ it('should vulcanize components', function() {
   });
 });
 
+it('should not change options', function() {
+  var options = {};
+  var tree = vulcanize('fixtures/index.html', options);
+  builder = new Broccoli.Builder(tree);
+
+  return builder.build().then(function() {
+    assert.deepEqual({}, options);
+  });
+});
+
 it('should break component into html and js when CSP is enabled', function() {
   var tree = vulcanize('fixtures/index.html', {
     csp: true
@@ -38,13 +48,30 @@ it('should break component into html and js when CSP is enabled', function() {
 });
 
 it('should rename vulcanized component', function() {
+  var outputFilePath = 'vulcanized/vulcanized.html';
   var options = {
-    output: 'vulcanized/vulcanized.html'
+    output: outputFilePath
   };
   var tree = vulcanize('fixtures/index.html', options);
   builder = new Broccoli.Builder(tree);
 
-  return builder.build().then(function() {
-    assert(fs.existsSync(options.output));
+  return builder.build().then(function(result) {
+    var indexHtml = path.join(result.directory, outputFilePath);
+    assert(fs.existsSync(indexHtml));
+  });
+});
+
+it('should be able to call vulcanize repeatedly', function() {
+  var tree = vulcanize('fixtures/index.html');
+  builder = new Broccoli.Builder(tree);
+
+  return builder.build().then(function(result) {
+    var indexHtml = path.join(result.directory, 'index.html');
+    assert(fs.existsSync(indexHtml));
+
+    return builder.build().then(function(result) {
+      var indexHtml = path.join(result.directory, 'index.html');
+      assert(fs.existsSync(indexHtml));
+    });
   });
 });
