@@ -12,13 +12,14 @@ npm install --save-dev broccoli-vulcanize
 ## Usage
 
 ```js
-var vulcanize = require('gulp-vulcanize');
-var inputTree = 'index.html';
+var vulcanize = require('broccoli-vulcanize');
+var inputTree = 'public';
 var options = {
+  input: 'index.html',
+  output: 'output/vulcanized.html',
   csp: true,
   inline: true,
   strip: true,
-  output: 'output/vulcanized.html',
   excludes: {
     imports: ["(^data:)|(^http[s]?:)|(^\/)"],
     scripts: ["(^data:)|(^http[s]?:)|(^\/)"],
