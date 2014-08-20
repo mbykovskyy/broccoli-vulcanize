@@ -1,6 +1,6 @@
 {
   "name": "broccoli-vulcanize",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Broccoli plugin for Polymer Vulcanize tool",
   "homepage": "https://github.com/mbykovskyy/broccoli-vulcanize",
   "repository": {
