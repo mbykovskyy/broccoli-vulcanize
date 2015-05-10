@@ -17,13 +17,8 @@ var inputTree = 'public';
 var options = {
   input: 'index.html',
   output: 'output/vulcanized.html',
-  csp: true,
   inline: true,
-  strip: true,
-  excludes: {
-    imports: ["(^data:)|(^http[s]?:)|(^\/)"],
-    scripts: ["(^data:)|(^http[s]?:)|(^\/)"],
-    styles: ["(^data:)|(^http[s]?:)|(^\/)"]
+  excludes: [/(^data:)|(^http[s]?:)|(^\/)/]
   }
 };
 
