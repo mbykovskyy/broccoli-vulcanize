@@ -5,6 +5,7 @@ var vulcanize = require('vulcanize');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var clone = require('clone');
+var fs = require('fs');
 var RefWatcher = require('./lib/ref-watcher');
 var RefScraper = require('./lib/ref-scraper');
 var RefWalker = require('./lib/ref-walker');
@@ -27,17 +28,19 @@ function Vulcanize(inputTree, options) {
 
 Vulcanize.prototype.vulcanize = function(options) {
   return new RSVP.Promise(function(resolve, reject) {
-    vulcanize.setOptions(options, function(error) {
+    mkdirp(path.dirname(options.output), function(error) {
       if (error) {
         reject(error);
       }
 
-      mkdirp(path.dirname(options.output), function(error) {
+      vulcanize.setOptions(options);
+
+      vulcanize.process(options.input, function(error, html) {
         if (error) {
           reject(error);
         }
 
-        vulcanize.processDocument();
+        fs.writeFileSync(options.output, html);
         resolve();
       });
     });

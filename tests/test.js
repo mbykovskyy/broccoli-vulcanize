@@ -8,7 +8,7 @@ var builder;
 
 afterEach(function() {
   if (builder) {
-    builder.cleanup();
+     builder.cleanup();
   }
 });
 
@@ -48,22 +48,6 @@ it('should not be affected by options changing outside', function() {
   return builder.build().then(function(result) {
     var indexHtml = path.join(result.directory, 'index.html');
     assert(fs.existsSync(indexHtml));
-  });
-});
-
-it('should break component into html and js when CSP is enabled', function() {
-  var tree = vulcanize('fixtures', {
-    input: 'index.html',
-    csp: true
-  });
-  builder = new Broccoli.Builder(tree);
-
-  return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'index.html');
-    assert(fs.existsSync(indexHtml));
-
-    var indexJs = path.join(result.directory, 'index.js');
-    assert(fs.existsSync(indexJs));
   });
 });
 
