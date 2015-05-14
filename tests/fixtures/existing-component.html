@@ -1,10 +1,10 @@
 <link rel="import" type="css" href="style.css">
 
-<polymer-element name="existing-component">
+<dom-module id="existing-component">
   <template>
     <content></content>
   </template>
-  <script>
-    Polymer('existing-component');
-  </script>
-</polymer-element>
+</dom-module>
+<script>
+  Polymer({is: 'existing-component'});
+</script>

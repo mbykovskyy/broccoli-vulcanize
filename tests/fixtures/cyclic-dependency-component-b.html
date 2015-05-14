@@ -1,0 +1,10 @@
+<link rel="import" href="cyclic-dependency-component-a.html">
+
+<dom-module id="cyclic-dependency-component-b">
+  <template>
+    <cyclic-dependency-component-a></cyclic-dependency-component-a>
+  </template>
+</dom-module>
+<script>
+  Polymer({is: 'cyclic-dependency-component-b'});
+</script>
