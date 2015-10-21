@@ -113,3 +113,20 @@ it('should accept a broccoli tree', function() {
     assert(fs.existsSync(indexHtml));
   });
 });
+
+describe('option `excludes`', function() {
+  it('should accept `RegExp[]` as input', function() {
+    var tree = vulcanize('fixtures', {
+      input: 'basic-index.html',
+      inlineCss: true,
+      excludes: [/\.css$/i],
+    });
+    builder = new Broccoli.Builder(tree);
+
+    return builder.build().then(function(result) {
+      var indexHtml = path.join(result.directory, 'basic-index.html');
+      var htmlContent = fs.readFileSync(indexHtml, 'utf8');
+      assert(htmlContent.indexOf('background-color: white;') === -1);
+    });
+  });
+});
