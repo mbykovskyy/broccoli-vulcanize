@@ -115,11 +115,11 @@ it('should accept a broccoli tree', function() {
 });
 
 describe('option `excludes`', function() {
-  it('should accept `RegExp[]` as input', function() {
+  it('should accept `String[]` as input', function() {
     var tree = vulcanize('fixtures', {
       input: 'basic-index.html',
       inlineCss: true,
-      excludes: [/\.css$/i],
+      excludes: ['.css']
     });
     builder = new Broccoli.Builder(tree);
 

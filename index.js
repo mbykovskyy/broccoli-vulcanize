@@ -1,7 +1,7 @@
 'use strict';
 var Writer = require('broccoli-writer');
 var RSVP = require('rsvp');
-var vulcanize = require('vulcanize');
+var Vulcan = require('vulcanize');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var clone = require('clone');
@@ -33,9 +33,7 @@ Vulcanize.prototype.vulcanize = function(options) {
         reject(error);
       }
 
-      vulcanize.setOptions(options);
-
-      vulcanize.process(options.input, function(error, html) {
+      new Vulcan(options).process(options.input, function(error, html) {
         if (error) {
           reject(error);
         }
