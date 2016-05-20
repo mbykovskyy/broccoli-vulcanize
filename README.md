@@ -17,13 +17,19 @@ var inputTree = 'public';
 var options = {
   input: 'index.html',
   output: 'output/vulcanized.html',
-  excludes: [/^data:/, /^http[s]?:/, /^\//],
   abspath: '/webroot/',
-  stripExcludes: false,
+  excludes: ['.css', '.js'],
+  stripExcludes: [],
+  addedImports: [
+    'foo/bar.html'
+  ],
+  redirects: [
+    'https://example.com/foo/bar.html|/foo/bar/baz.html'
+  ],
   stripComments: false,
   inlineScripts: false,
   inlineCss: false,
-  implicitStrip: false
+  implicitStrip: true
 };
 
 module.exports = vulcanize(inputTree, options);
