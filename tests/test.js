@@ -19,7 +19,7 @@ it('should vulcanize components', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'basic-index.html');
+    var indexHtml = path.join(builder.outputPath, 'basic-index.html');
     assert(fs.existsSync(indexHtml));
   });
 });
@@ -31,7 +31,7 @@ it('should vulcanize cyclic dependent components', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'cyclic-dependency-index.html');
+    var indexHtml = path.join(builder.outputPath, 'cyclic-dependency-index.html');
     assert(fs.existsSync(indexHtml));
   });
 });
@@ -58,7 +58,7 @@ it('should not be affected by options changing outside', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'basic-index.html');
+    var indexHtml = path.join(builder.outputPath, 'basic-index.html');
     assert(fs.existsSync(indexHtml));
   });
 });
@@ -72,7 +72,7 @@ it('should rename vulcanized component', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, outputFilePath);
+    var indexHtml = path.join(builder.outputPath, outputFilePath);
     assert(fs.existsSync(indexHtml));
   });
 });
@@ -84,24 +84,18 @@ it('should be able to call vulcanize repeatedly', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'basic-index.html');
+    var indexHtml = path.join(builder.outputPath, 'basic-index.html');
     assert(fs.existsSync(indexHtml));
 
     return builder.build().then(function(result) {
-      var indexHtml = path.join(result.directory, 'basic-index.html');
+      var indexHtml = path.join(builder.outputPath, 'basic-index.html');
       assert(fs.existsSync(indexHtml));
     });
   });
 });
 
 it('should accept a broccoli tree', function() {
-  var tree = {
-    read: function() {
-      return 'fixtures';
-    },
-    cleanup: function() {
-    }
-  };
+  var tree = new (require('broccoli-funnel'))('fixtures')
 
   tree = vulcanize(tree, {
     input: 'basic-index.html'
@@ -109,7 +103,7 @@ it('should accept a broccoli tree', function() {
   builder = new Broccoli.Builder(tree);
 
   return builder.build().then(function(result) {
-    var indexHtml = path.join(result.directory, 'basic-index.html');
+    var indexHtml = path.join(builder.outputPath, 'basic-index.html');
     assert(fs.existsSync(indexHtml));
   });
 });
@@ -124,7 +118,7 @@ describe('option `excludes`', function() {
     builder = new Broccoli.Builder(tree);
 
     return builder.build().then(function(result) {
-      var indexHtml = path.join(result.directory, 'basic-index.html');
+      var indexHtml = path.join(builder.outputPath, 'basic-index.html');
       var htmlContent = fs.readFileSync(indexHtml, 'utf8');
       assert(htmlContent.indexOf('background-color: white;') === -1);
     });

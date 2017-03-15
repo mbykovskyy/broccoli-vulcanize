@@ -1,5 +1,5 @@
 'use strict';
-var Writer = require('broccoli-writer');
+var Plugin = require('broccoli-plugin');
 var RSVP = require('rsvp');
 var Vulcan = require('vulcanize');
 var path = require('path');
@@ -11,7 +11,7 @@ var RefScraper = require('./lib/ref-scraper');
 var RefWalker = require('./lib/ref-walker');
 
 module.exports = Vulcanize;
-Vulcanize.prototype = Object.create(Writer.prototype);
+Vulcanize.prototype = Object.create(Plugin.prototype);
 Vulcanize.prototype.constructor = Vulcanize;
 
 function Vulcanize(inputTree, options) {
@@ -24,6 +24,7 @@ function Vulcanize(inputTree, options) {
   this.options = clone(options) || {};
   this.inputTree = inputTree;
   this.outputFilepath = options.output || path.basename(options.input);
+  Plugin.call(this, [inputTree]);
 }
 
 Vulcanize.prototype.vulcanize = function(options) {
@@ -45,8 +46,8 @@ Vulcanize.prototype.vulcanize = function(options) {
   });
 };
 
-Vulcanize.prototype.watchRefs = function(readTree, file, excludes) {
-  var watcher = new RefWatcher(readTree);
+Vulcanize.prototype.watchRefs = function(file, excludes) {
+  var watcher = new RefWatcher();
   var scraper = new RefScraper(excludes);
   var walker = new RefWalker(scraper, watcher);
 
@@ -55,17 +56,15 @@ Vulcanize.prototype.watchRefs = function(readTree, file, excludes) {
   });
 };
 
-Vulcanize.prototype.write = function(readTree, destDir) {
+Vulcanize.prototype.build = function() {
   // We have to clone options again as vulcanize changes the hash which causes
   // the hash grow when called repeatedly.
   var options = clone(this.options);
-  options.output = path.join(destDir, this.outputFilepath);
+  options.output = path.join(this.outputPath, this.outputFilepath);
 
-  return readTree(this.inputTree).then(function(srcPath) {
-    options.input = path.join(srcPath, options.input);
+  options.input = path.join(this.inputPaths[0], options.input);
 
-    return this.vulcanize(options).then(function() {
-      return this.watchRefs(readTree, options.input, options.excludes);
-    }.bind(this));
+  return this.vulcanize(options).then(function() {
+    return this.watchRefs(options.input, options.excludes);
   }.bind(this));
 };
